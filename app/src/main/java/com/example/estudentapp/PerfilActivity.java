@@ -2,23 +2,36 @@ package com.example.estudentapp;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.estudentapp.databinding.ActivityPerfilBinding;
 
 public class PerfilActivity extends AppCompatActivity {
+
+    private ActivityPerfilBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_perfil);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        binding = ActivityPerfilBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        String nombre = getIntent().getStringExtra(MainActivity.EXTRA_NOMBRE);
+        String matricula = getIntent().getStringExtra(MainActivity.EXTRA_MATRICULA);
+        String carrera = getIntent().getStringExtra(MainActivity.EXTRA_CARRERA);
+
+        binding.tvSaludo.setText(getString(R.string.saludo, primerNombre(nombre)));
+        binding.tvNombre.setText(getString(R.string.label_nombre, nombre));
+        binding.tvMatricula.setText(getString(R.string.label_matricula, matricula));
+        binding.tvCarrera.setText(getString(R.string.label_carrera, carrera));
+
+        binding.btnEditar.setOnClickListener(v -> finish());
+    }
+
+    private String primerNombre(String completo) {
+        if (completo == null || completo.isEmpty()) {
+            return "";
+        }
+        return completo.split(" ")[0];
     }
 }
